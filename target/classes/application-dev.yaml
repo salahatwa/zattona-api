@@ -1,0 +1,56 @@
+server:
+  port: 8090
+  forward-headers-strategy: native
+  compression:
+    enabled: false
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+
+    # postgress database configuration.
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/db_genhub?useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: postgres
+    password: 123456
+
+
+  h2:
+    console:
+      settings:
+        web-allow-others: false
+      path: /h2-console
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      base-path: /api/admin/actuator
+      exposure:
+        include: ['httptrace', 'metrics','env','logfile','health']
+logging:
+  level:
+    run.halo.app: INFO
+    org.hibernate: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    org.hibernate.type.descriptor.sql.BasicExtractor: INFO
+  file:
+    path: ${user.home}/halo-dev/logs
+
+springfox:
+  documentation:
+    enabled: true
+
+halo:
+  doc-disabled: false
+  production-env: false
+  auth-enabled: true
+  mode: development
+  workDir: ${user.home}\genhub-dev
+  cache: level
+  ipv4DataPath: ip2locationdb/IP2LOCATION-LITE-DB11.BIN
+  ipv6DataPath: 
