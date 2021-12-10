@@ -1,0 +1,24 @@
+server:
+  # Response data gzip.
+  compression:
+    enabled: false
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: postgresql://ec2-54-225-190-241.compute-1.amazonaws.com:5432/dfjj6v4s5vqd2r?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: wuacxgyiweddhi
+    password: b817f63bfe90738accb2e30379cf2e06548f1ed05b1bf1bf41286353a04e2e46
+
+
+  
+halo:
+  # Your admin client path is https://your-domain/{admin-path}
+  admin-path: admin
+  doc-disabled: true
+  production-env: true
+  auth-enabled: true
+  mode: production
+  workDir: ${user.home}/genhub-prod/
+  cache: level
+  ipv4DataPath: ip2locationdb/IP2LOCATION-LITE-DB11.BIN
+  ipv6DataPath: 

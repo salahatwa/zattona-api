@@ -1,0 +1,481 @@
+# configurations
+# For details, please refer to：https://halo.run/develop/theme.html#settings-yaml
+genernal:
+  label: General settings
+  items:
+    home_title:
+      name: home_title
+      label: Home page display blog name
+      type: text
+      placeholder: "Used for homepage display name"
+      description: "Note: If filled in, the original blog name will be overwritten"
+    home_description:
+      name: home_description
+      label: website slogan
+      type: text
+      placeholder: "Used for home page description"
+    posts_style:
+      name: posts_style
+      label: Home page article list display style
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Card
+        - value: false
+          label: List
+    show_popular:
+      name: show_popular
+      label: Whether to display popular articles in the list style
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Yes
+        - value: false
+          label: No
+    card_hover_summary:
+      name: card_hover_summary
+      label: Card style homepage display article introduction
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    home_cover:
+      name: home_cover
+      label: Home background
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    enabled_index_cover_height:
+      name: enabled_index_cover_height
+      label: Homepage full screen image
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    card_random_cover_list:
+      name: card_random_cover_list
+      label: List of random cover pictures, separated by semicolons
+      type: textarea
+      description: "English semicolon (;) separates. Note that if the image path is filled in, Turnon will default to a random image"
+    open_night_mode:
+      name: open_night_mode
+      label: Turnon Night mode
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    auto_night_mode:
+      name: auto_night_mode
+      label: Automatic night mode
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+      description: "This will change according to the browser theme"
+    right_corner_circle:
+      name: right_corner_circle
+      label: Turnon Bottom right button
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    default_hide_menu:
+      name: default_hide_menu
+      label: Open display shrink menu button
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+      description: "The menu will shrink by default after opening"
+    Icp:
+      name: Icp
+      label: "ICP record number"
+      type: text
+      placeholder: "Fill in the ICP record number, if not, leave it blank. "
+    PublicSecurityRecord:
+      name: PublicSecurityRecord
+      label: "Net Security Record Number"
+      type: text
+      placeholder: "Fill in the network security record number code, if not, leave it blank"
+    QR_code_zfb:
+      name: QR_code_zfb
+      label: "Alipay QR code image"
+      type: attachment
+      placeholder: "Alipay payment QR code link, no display if not filled"
+    QR_code_wx:
+      name: QR_code_wx
+      label: "WeChat QR code image"
+      type: attachment
+      placeholder: "WeChat payment QR code link, no display if not filled"
+head_img:
+  label: Page header image
+  items:
+    archives_patternimg:
+      name: archives_patternimg
+      label: Default header image of archive page
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    links_patternimg:
+      name: links_patternimg
+      label: The default header of the friendly link page
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    tag_patternimg:
+      name: tag_patternimg
+      label: Default header image of tab page
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    categories_patternimg:
+      name: categories_patternimg
+      label: Default header image of category page
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    journals_patternimg:
+      name: journals_patternimg
+      label: The default header image of the article page under the log
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    photos_patternimg:
+      name: photos_patternimg
+      label: Default header image of the album page
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    search_patternimg:
+      name: search_patternimg
+      label: Default head image of search results
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+    links_placeholder:
+      name: links_placeholder
+      label: Friendship link default user avatar
+      type: attachment
+      default: https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/default-bg.jpg
+post:
+  label: Article page
+  items:
+    share_type:
+      name: share_type
+      label: Article sharing component
+      type: select
+      default: 'addtoany'
+      options:
+        - value: ''
+          label: 'no'
+        - value: addtoany
+          label: addtoany
+        - value: sharejs
+          label: sharejs
+    post_toc:
+      name: post_toc
+      label: Show Catalog
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    post_nepre:
+      name: post_nepre
+      label: The article page displays the previous and next article
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    enabled_mathjax:
+      name: enabled_mathjax
+      label: Show formula
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    enable_code_highlight:
+      name: enable_code_highlight
+      label: Code highlight
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    enable_code_lineNumber:
+      name: enable_code_lineNumber
+      label: Code shows the line number (need to highlight Turnon code first)
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    more_lang_code:
+      name: more_lang_code
+      label: More code highlighting
+      type: radio
+      data-type: bool
+      default: false
+      decription: "If the current code highlighting is not supported, you can try this switch of Turnon"
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    idea_code_style:
+      name: idea_code_style
+      label: IDEA Code style
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    code_style:
+      name: code_style
+      label: Code style
+      type: select
+      data-type: string
+      default: "tomorrow-night-bright"
+      description: "Code style"
+      options:
+        - value: "tomorrow-night-bright"
+          label: "tomorrow"
+        - value: "atelier-lakeside-light"
+          label: "atelier"
+        - value: "atom-one-light"
+          label: "atom"
+        - value: "github"
+          label: "github"
+        - value: "github-gist"
+          label: "github-gist"
+        - value: "kimbie.light"
+          label: "kimbie"
+        - value: "paraiso-light"
+          label: "paraiso"
+        - value: "androidstudio"
+          label: "androidstudio"
+#    enabled_mermaid:
+#      name: enabled_mermaid
+#      label: Mermaid
+#      type: radio
+#      data-type: bool
+#      default: false
+#      options:
+#        - value: true
+#          label: Turnon
+#        - value: false
+#          label: Shutdown
+title:
+  label: Custom page title
+  items:
+    links_title:
+      name: links_title
+      label: Friends link page title
+      type: text
+      default: Friends chain
+    jounarls_title:
+      name: jounarls_title
+      label: Log page title
+      type: text
+      default: Log
+    tags_title:
+      name: tags_title
+      label: Tab page title
+      type: text
+      default: Tags
+    categories_title:
+      name: categories_title
+      label: Categories
+      type: text
+      default: Categories
+    achieve_title:
+      name: achieve_title
+      label: Archive page title
+      type: text
+      default: Archive
+    photos_title:
+      name: photos_title
+      label: Album page title
+      type: text
+      default: Photo album
+social:
+  label: Social network
+  items:
+    sina:
+      name: sina
+      label: Sina Weibo
+      type: text
+      placeholder: "Used to display Sina Weibo social information at the bottom"
+      description: "Sina Weibo homepage link"
+    telegram:
+      name: telegram
+      label: Telegram
+      type: text
+      placeholder: "Used to display the bottom Telegram social information"
+      description: "Telegram username"
+    twitter:
+      name: twitter
+      label: Twitter
+      type: text
+      placeholder: "Used to display the bottom Twitter social information"
+      description: "Twitter Home link"
+    qq:
+      name: qq
+      label: Tencent QQ
+      type: text
+      placeholder: "Used to display QQ social information at the bottom"
+      description: "QQ number"
+    github:
+      name: github
+      label: Github
+      type: text
+      placeholder: "Used to display the bottom Github social information"
+      description: "GitHub Home link"
+    zhihu:
+      name: zhihu
+      label: Know almost
+      type: text
+      placeholder: "Used to display social information at the bottom"
+      description: "Know the homepage link"
+    mail:
+      name: mail
+      label: email
+      type: text
+      placeholder: "Used to display social information in the bottom mailbox"
+      description: "email address"
+    rss:
+      name: rss
+      label: Subscribe button
+      type: radio
+      data-type: bool
+      default: true
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+experimental:
+  label: Advanced Features
+  items:
+    pjax_enabled:
+      name: pjax_enabled
+      label: Global Pjax
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    enable_image_view:
+      name: enable_image_view
+      label: enable image preview (click to full screen)
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    enable_photo:
+      name: enable_photo
+      label: Enable album
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+
+other:
+  label: other
+  items:
+    TimeStatistics:
+      name: TimeStatistics
+      label: "Site running time statistics"
+      type: text
+      description: "Fill in the starting time, format: month/day/year hour:minute:second, such as 08/20/2018 12:00:00"
+    visit_statistics:
+      name: visit_statistics
+      label: User access statistics
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+    Aplayer:
+      name: Aplayer
+      label: Aplayer Suction bottom player
+      type: text
+      placeholder: "Netease cloud playlist id"
+      description: "Netease cloud playlist id, for example: 60198."
+    xiang_ying_xiong_zhi_jing:
+      name: xiang_ying_xiong_zhi_jing
+      label: Tribute to the hero, may the spirit live forever
+      type: radio
+      data-type: bool
+      default: false
+      options:
+        - value: true
+          label: Turnon
+        - value: false
+          label: Shutdown
+      description: "I hope this feature will never be used"
+    other_script_file:
+      name: other_script_file
+      label: Js script file introduced as a plugin
+      type: textarea
+      default: ""
+    common_js:
+      name: common_js
+      label: Js script content that needs to be executed as a plugin
+      type: textarea
+      default: ""
+      description: "At the same time only load and pjax execute the script"
