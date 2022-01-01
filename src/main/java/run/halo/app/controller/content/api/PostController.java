@@ -1,14 +1,27 @@
 package run.halo.app.controller.content.api;
 
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.domain.Sort.Direction.DESC;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
+
+import io.swagger.annotations.ApiOperation;
 import run.halo.app.cache.lock.CacheLock;
 import run.halo.app.exception.NotFoundException;
 import run.halo.app.model.dto.BaseCommentDTO;
@@ -18,15 +31,14 @@ import run.halo.app.model.entity.PostComment;
 import run.halo.app.model.enums.CommentStatus;
 import run.halo.app.model.enums.PostStatus;
 import run.halo.app.model.params.PostCommentParam;
-import run.halo.app.model.vo.*;
+import run.halo.app.model.vo.BaseCommentVO;
+import run.halo.app.model.vo.BaseCommentWithParentVO;
+import run.halo.app.model.vo.CommentWithHasChildrenVO;
+import run.halo.app.model.vo.PostDetailVO;
+import run.halo.app.model.vo.PostListVO;
 import run.halo.app.service.OptionService;
 import run.halo.app.service.PostCommentService;
 import run.halo.app.service.PostService;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 /**
  * Content post controller.
@@ -98,7 +110,9 @@ public class PostController {
 	@ApiOperation("Gets previous post by current post id.")
 	public PostDetailVO getPrevPostBy(@PathVariable("postId") Integer postId) {
 		Post post = postService.getById(postId);
-		Post prevPost = postService.getPrevPost(post).orElseThrow(() -> new NotFoundException("查询不到该文章的信息"));
+		Post prevPost = postService.getPrevPost(post)
+				.orElseThrow(() -> new NotFoundException("Can't find the information of this article"));
+
 		return postService.convertToDetailVo(prevPost);
 	}
 
@@ -106,7 +120,8 @@ public class PostController {
 	@ApiOperation("Gets next post by current post id.")
 	public PostDetailVO getNextPostBy(@PathVariable("postId") Integer postId) {
 		Post post = postService.getById(postId);
-		Post nextPost = postService.getNextPost(post).orElseThrow(() -> new NotFoundException("查询不到该文章的信息"));
+		Post nextPost = postService.getNextPost(post)
+				.orElseThrow(() -> new NotFoundException("Can't find the information of this article"));
 		return postService.convertToDetailVo(nextPost);
 	}
 
@@ -115,7 +130,12 @@ public class PostController {
 	public PostDetailVO getBy(@RequestParam("slug") String slug,
 			@RequestParam(value = "formatDisabled", required = false, defaultValue = "true") Boolean formatDisabled,
 			@RequestParam(value = "sourceDisabled", required = false, defaultValue = "false") Boolean sourceDisabled) {
-		PostDetailVO postDetailVO = postService.convertToDetailVo(postService.getBySlug(slug));
+
+		Post post = postService.getBySlug(slug);
+		PostDetailVO postDetailVO = postService.convertToDetailVo(post);
+
+		Optional<Post> prevPost = postService.getPrevPost(post);
+		Optional<Post> nextPost = postService.getNextPost(post);
 
 		if (formatDisabled) {
 			// Clear the format content
@@ -125,6 +145,20 @@ public class PostController {
 		if (sourceDisabled) {
 			// Clear the original content
 			postDetailVO.setOriginalContent(null);
+		}
+
+		if (prevPost.isPresent()) {
+			Post postPrev = prevPost.get();
+			postPrev.setOriginalContent(null);
+			postPrev.setFormatContent(null);
+			postDetailVO.setPrevPost(postService.convertToDetailVo(postPrev));
+		}
+
+		if (nextPost.isPresent()) {
+			Post postNext = nextPost.get();
+			postNext.setOriginalContent(null);
+			postNext.setFormatContent(null);
+			postDetailVO.setPrevPost(postService.convertToDetailVo(postNext));
 		}
 
 		postService.publishVisitEvent(postDetailVO.getId());

@@ -23,16 +23,19 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class PostDetailVO extends BasePostDetailDTO {
 
-    private Set<Integer> tagIds;
+	private Set<Integer> tagIds;
 
-    private List<TagDTO> tags;
+	private List<TagDTO> tags;
 
-    private Set<Integer> categoryIds;
+	private Set<Integer> categoryIds;
 
-    private List<CategoryDTO> categories;
+	private List<CategoryDTO> categories;
 
-    private Set<Long> metaIds;
+	private Set<Long> metaIds;
 
-    private List<BaseMetaDTO> metas;
+	private List<BaseMetaDTO> metas;
+
+	private PostDetailVO prevPost;
+
+	private PostDetailVO nextPost;
 }
-

@@ -19,11 +19,11 @@ import freemarker.template.TemplateException;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import run.halo.app.exception.ServiceException;
+import run.halo.app.generator.utils.IpUtils;
 import run.halo.app.tools.APIResult;
 import run.halo.app.tools.IpInfoDTO;
 import run.halo.app.tools.StateCode;
 import run.halo.app.tools.services.IpService;
-import run.halo.app.tools.utils.IpUtils;
 
 /**
  * <p>

@@ -1,0 +1,11 @@
+id: bao
+name: snow
+author:
+  name: salah atwa
+  website: https://baozi.fun
+description: Avenue to Jane
+logo:
+website: https://www.linkedin.com/in/kayany-soliman-8759681b3/
+repo: https://github.com/salahatwa
+version: 1.0
+require: 1.3.0

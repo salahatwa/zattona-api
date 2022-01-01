@@ -658,7 +658,7 @@ public class PostServiceImpl extends BasePostServiceImpl<Post> implements PostSe
 		// Convert to base detail vo
 		PostDetailVO postDetailVO = new PostDetailVO().convertFrom(post);
 
-		if (StringUtils.isBlank(postDetailVO.getSummary())) {
+		if (StringUtils.isBlank(postDetailVO.getSummary())&&Objects.nonNull(post.getFormatContent())) {
 			postDetailVO.setSummary(generateSummary(post.getFormatContent()));
 		}
 

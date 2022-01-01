@@ -67,11 +67,14 @@ public class CategoryServiceImpl extends AbstractCrudService<Category, Integer> 
         }
 
         // Check parent id
+        System.out.println(category.getParentId());
         if (!ServiceUtils.isEmptyId(category.getParentId())) {
+        	System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
             count = categoryRepository.countById(category.getParentId());
 
             if (count == 0) {
-                log.error("Parent category with id: [{}] was not found, category: [{}]", category.getParentId(), category);
+            	System.out.println("++++++++++++++++++++");
+                log.info("Parent category with id: [{}] was not found, category: [{}]", category.getParentId(), category);
                 throw new NotFoundException("Parent category with id = " + category.getParentId() + " was not found");
             }
         }

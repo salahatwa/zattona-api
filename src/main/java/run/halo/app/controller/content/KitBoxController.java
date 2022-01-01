@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
+import run.halo.app.generator.utils.IpUtils;
 import run.halo.app.service.KitBoxService;
 import run.halo.app.tools.IpInfoDTO;
 import run.halo.app.tools.services.IpService;
-import run.halo.app.tools.utils.IpUtils;
 
 @Slf4j
 @Controller

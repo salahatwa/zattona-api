@@ -1,5 +1,6 @@
 package run.halo.app.controller.content.api;
 
+import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import run.halo.app.model.entity.Post;
 import run.halo.app.model.enums.PostStatus;
 import run.halo.app.model.vo.BlogConfigVO;
 import run.halo.app.model.vo.PostListVO;
+import run.halo.app.service.MenuService;
 import run.halo.app.service.OptionService;
 import run.halo.app.service.PostCommentService;
 import run.halo.app.service.PostService;
@@ -34,9 +36,11 @@ import run.halo.app.service.PostService;
 public class BlogConfigurationsController {
 
 	private final PostService postService;
+	private final MenuService menuService;
 
-	public BlogConfigurationsController(PostService postService) {
+	public BlogConfigurationsController(PostService postService, MenuService menuService) {
 		this.postService = postService;
+		this.menuService = menuService;
 	}
 
 	@GetMapping
@@ -50,10 +54,10 @@ public class BlogConfigurationsController {
 	@ApiOperation("Lists top 5 view posts and latest  5 articles")
 	public BlogConfigVO init() {
 		List<Post> posts = postService.topView();
-
 		BlogConfigVO configs = new BlogConfigVO();
 		configs.setTopViewPosts(postService.convertToListVo(posts));
 		configs.setLatestPosts(this.pageBy(PageRequest.of(0, 5, Sort.by(Direction.DESC, "createTime"))).getContent());
+		configs.setMenuTeams(menuService.listTeamVos( Sort.by(Direction.ASC, "team")));
 
 		return configs;
 	}

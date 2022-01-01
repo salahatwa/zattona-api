@@ -15,5 +15,6 @@ public class BlogConfigVO {
 
 	private List<PostListVO> topViewPosts;
 	private List<PostListVO> latestPosts;
+	private List<MenuTeamVO> menuTeams;
 
 }

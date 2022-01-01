@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import run.halo.app.config.properties.HaloProperties;
 import run.halo.app.exception.ServiceException;
+import run.halo.app.generator.utils.BeanUtils;
 import run.halo.app.tools.IpInfoDTO;
 import run.halo.app.tools.ip2location.IP2Location;
 import run.halo.app.tools.ip2location.IPResult;
-import run.halo.app.tools.utils.BeanUtils;
 import run.halo.app.utils.Builder;
 import run.halo.app.utils.HaloUtils;
 
