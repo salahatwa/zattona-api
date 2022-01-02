@@ -1,5 +1,6 @@
 server:
   port: 8090
+  connection-timeout: 50000
   forward-headers-strategy: native
   compression:
     enabled: false
@@ -31,8 +32,8 @@ spring:
     enabled: false
   servlet:
     multipart:
-      max-file-size: 10240MB
-      max-request-size: 10240MB
+      max-file-size: 20240MB
+      max-request-size: 20240MB
       location: /tmp/run.halo.app
 management:
   endpoints:
