@@ -8,6 +8,7 @@ import run.halo.app.model.dto.post.BasePostDetailDTO;
 import run.halo.app.model.params.PostMarkdownParam;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -117,4 +118,6 @@ public interface BackupService {
      * @param fileName
      */
     void deleteMarkdown(@NonNull String fileName);
+
+	void importData(InputStream inputStream) throws IOException;
 }

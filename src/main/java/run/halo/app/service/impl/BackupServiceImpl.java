@@ -1,42 +1,7 @@
 package run.halo.app.service.impl;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.io.file.FileWriter;
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.IdUtil;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.web.multipart.MultipartFile;
-import run.halo.app.config.properties.HaloProperties;
-import run.halo.app.event.options.OptionUpdatedEvent;
-import run.halo.app.event.theme.ThemeUpdatedEvent;
-import run.halo.app.exception.NotFoundException;
-import run.halo.app.exception.ServiceException;
-import run.halo.app.handler.file.FileHandler;
-import run.halo.app.model.dto.BackupDTO;
-import run.halo.app.model.dto.post.BasePostDetailDTO;
-import run.halo.app.model.entity.*;
-import run.halo.app.model.params.PostMarkdownParam;
-import run.halo.app.model.support.HaloConst;
-import run.halo.app.model.vo.PostMarkdownVO;
-import run.halo.app.security.service.OneTimeTokenService;
-import run.halo.app.service.*;
-import run.halo.app.utils.DateTimeUtils;
-import run.halo.app.utils.HaloUtils;
-import run.halo.app.utils.JsonUtils;
-
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
@@ -45,10 +10,95 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.io.file.FileWriter;
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.IdUtil;
+import lombok.extern.slf4j.Slf4j;
+import run.halo.app.config.properties.HaloProperties;
+import run.halo.app.event.options.OptionUpdatedEvent;
+import run.halo.app.event.theme.ThemeUpdatedEvent;
+import run.halo.app.exception.NotFoundException;
+import run.halo.app.exception.ServiceException;
+import run.halo.app.handler.file.FileHandler;
+import run.halo.app.model.dto.BackupDTO;
+import run.halo.app.model.dto.post.BasePostDetailDTO;
+import run.halo.app.model.entity.Attachment;
+import run.halo.app.model.entity.Category;
+import run.halo.app.model.entity.CommentBlackList;
+import run.halo.app.model.entity.Journal;
+import run.halo.app.model.entity.JournalComment;
+import run.halo.app.model.entity.Link;
+import run.halo.app.model.entity.Log;
+import run.halo.app.model.entity.Menu;
+import run.halo.app.model.entity.Option;
+import run.halo.app.model.entity.Photo;
+import run.halo.app.model.entity.Post;
+import run.halo.app.model.entity.PostCategory;
+import run.halo.app.model.entity.PostComment;
+import run.halo.app.model.entity.PostMeta;
+import run.halo.app.model.entity.PostTag;
+import run.halo.app.model.entity.Sheet;
+import run.halo.app.model.entity.SheetComment;
+import run.halo.app.model.entity.SheetMeta;
+import run.halo.app.model.entity.Tag;
+import run.halo.app.model.entity.ThemeSetting;
+import run.halo.app.model.entity.User;
+import run.halo.app.model.params.PostMarkdownParam;
+import run.halo.app.model.support.HaloConst;
+import run.halo.app.model.vo.PostMarkdownVO;
+import run.halo.app.security.service.OneTimeTokenService;
+import run.halo.app.service.AttachmentService;
+import run.halo.app.service.BackupService;
+import run.halo.app.service.CategoryService;
+import run.halo.app.service.CommentBlackListService;
+import run.halo.app.service.JournalCommentService;
+import run.halo.app.service.JournalService;
+import run.halo.app.service.LinkService;
+import run.halo.app.service.LogService;
+import run.halo.app.service.MenuService;
+import run.halo.app.service.OptionService;
+import run.halo.app.service.PhotoService;
+import run.halo.app.service.PostCategoryService;
+import run.halo.app.service.PostCommentService;
+import run.halo.app.service.PostMetaService;
+import run.halo.app.service.PostService;
+import run.halo.app.service.PostTagService;
+import run.halo.app.service.SheetCommentService;
+import run.halo.app.service.SheetMetaService;
+import run.halo.app.service.SheetService;
+import run.halo.app.service.TagService;
+import run.halo.app.service.ThemeSettingService;
+import run.halo.app.service.UserService;
+import run.halo.app.utils.DateTimeUtils;
+import run.halo.app.utils.HaloUtils;
+import run.halo.app.utils.JsonUtils;
 
 /**
  * Backup service implementation.
@@ -372,9 +422,13 @@ public class BackupServiceImpl implements BackupService {
 
 	@Override
 	public void importData(MultipartFile file) throws IOException {
-		System.out.println(">>>>>>>>>>>>>>>>>>");
-		System.out.println(file.getName());
-		String jsonContent = IoUtil.read(file.getInputStream(), StandardCharsets.UTF_8);
+		this.importData(file.getInputStream());
+	}
+
+	@Override
+	public void importData(InputStream stream) throws IOException {
+
+		String jsonContent = IoUtil.read(stream, StandardCharsets.UTF_8);
 
 		ObjectMapper mapper = JsonUtils.createDefaultJsonMapper();
 		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {
@@ -484,7 +538,7 @@ public class BackupServiceImpl implements BackupService {
 			}
 			content.append(postMarkdownVO.getOriginalContent());
 			try {
-				String markdownFileName =  postMarkdownVO.getSlug() + ".md";
+				String markdownFileName = postMarkdownVO.getSlug() + ".md";
 				Path markdownFilePath = Paths.get(markdownFileTempPathName, markdownFileName);
 				if (!Files.exists(markdownFilePath.getParent())) {
 					Files.createDirectories(markdownFilePath.getParent());

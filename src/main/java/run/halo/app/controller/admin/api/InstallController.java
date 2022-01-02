@@ -1,5 +1,6 @@
 package run.halo.app.controller.admin.api;
 
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import cn.hutool.crypto.SecureUtil;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +28,7 @@ import run.halo.app.model.entity.Category;
 import run.halo.app.model.entity.PostComment;
 import run.halo.app.model.entity.User;
 import run.halo.app.model.enums.LogType;
+import run.halo.app.model.enums.MigrateType;
 import run.halo.app.model.enums.PostStatus;
 import run.halo.app.model.params.CategoryParam;
 import run.halo.app.model.params.InstallParam;
@@ -41,6 +45,7 @@ import run.halo.app.model.support.HaloConst;
 import run.halo.app.model.vo.PostDetailVO;
 import run.halo.app.service.CategoryService;
 import run.halo.app.service.MenuService;
+import run.halo.app.service.MigrateService;
 import run.halo.app.service.OptionService;
 import run.halo.app.service.PostCommentService;
 import run.halo.app.service.PostService;
@@ -73,11 +78,13 @@ public class InstallController {
 
 	private final MenuService menuService;
 
+	private final MigrateService migrateService;
+
 	private final ApplicationEventPublisher eventPublisher;
 
 	public InstallController(UserService userService, CategoryService categoryService, PostService postService,
 			SheetService sheetService, PostCommentService postCommentService, OptionService optionService,
-			MenuService menuService, ApplicationEventPublisher eventPublisher) {
+			MenuService menuService, MigrateService migrateService, ApplicationEventPublisher eventPublisher) {
 		this.userService = userService;
 		this.categoryService = categoryService;
 		this.postService = postService;
@@ -85,6 +92,7 @@ public class InstallController {
 		this.postCommentService = postCommentService;
 		this.optionService = optionService;
 		this.menuService = menuService;
+		this.migrateService = migrateService;
 		this.eventPublisher = eventPublisher;
 	}
 
@@ -100,7 +108,6 @@ public class InstallController {
 		boolean isInstalled = optionService.getByPropertyOrDefault(PrimaryProperties.IS_INSTALLED, Boolean.class,
 				false);
 
-		
 		if (isInstalled) {
 			throw new BadRequestException("This blog has been initialized and cannot be installed again！");
 		}
@@ -111,20 +118,25 @@ public class InstallController {
 		// Create default user
 		User user = createUser(installParam);
 
-		// Create default category
-		Category category = createDefaultCategoryIfAbsent();
+//		// Create default category
+//		Category category = createDefaultCategoryIfAbsent();
+//
+//		// Create default post
+//		PostDetailVO post = createDefaultPostIfAbsent(category);
+//
+//		// Create default sheet
+//		createDefaultSheet();
+//
+//		// Create default postComment
+//		createDefaultComment(post);
+//
+//		// Create default menu
+//		createDefaultMenu();
 
-		// Create default post
-		PostDetailVO post = createDefaultPostIfAbsent(category);
-
-		// Create default sheet
-		createDefaultSheet();
-
-		// Create default postComment
-		createDefaultComment(post);
-
-		// Create default menu
-		createDefaultMenu();
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("blog-backup.json");
+		
+	
+		migrateService.migrate(inputStream, MigrateType.HALO);
 
 		eventPublisher.publishEvent(new LogEvent(this, user.getId().toString(), LogType.BLOG_INITIALIZED,
 				"Blog has been successfully initialized"));

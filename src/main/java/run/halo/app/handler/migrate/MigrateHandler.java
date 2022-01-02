@@ -1,5 +1,7 @@
 package run.halo.app.handler.migrate;
 
+import java.io.InputStream;
+
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,4 +29,6 @@ public interface MigrateHandler {
      * @return true if supported; false or else
      */
     boolean supportType(@Nullable MigrateType type);
+
+	void migrate(@NonNull InputStream inputStream);
 }

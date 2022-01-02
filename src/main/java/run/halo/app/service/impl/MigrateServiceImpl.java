@@ -1,5 +1,7 @@
 package run.halo.app.service.impl;
 
+import java.io.InputStream;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,17 +18,26 @@ import run.halo.app.service.MigrateService;
 @Service
 public class MigrateServiceImpl implements MigrateService {
 
-    private final MigrateHandlers migrateHandlers;
+	private final MigrateHandlers migrateHandlers;
 
-    public MigrateServiceImpl(MigrateHandlers migrateHandlers) {
-        this.migrateHandlers = migrateHandlers;
-    }
+	public MigrateServiceImpl(MigrateHandlers migrateHandlers) {
+		this.migrateHandlers = migrateHandlers;
+	}
 
-    @Override
-    public void migrate(MultipartFile file, MigrateType migrateType) {
-        Assert.notNull(file, "Multipart file must not be null");
-        Assert.notNull(migrateType, "Migrate type must not be null");
+	@Override
+	public void migrate(MultipartFile file, MigrateType migrateType) {
+		Assert.notNull(file, "Multipart file must not be null");
+		Assert.notNull(migrateType, "Migrate type must not be null");
 
-        migrateHandlers.upload(file, migrateType);
-    }
+		migrateHandlers.upload(file, migrateType);
+	}
+
+	@Override
+	public void migrate(InputStream inputStream, MigrateType migrateType) {
+		Assert.notNull(inputStream, "inputStream file must not be null");
+		Assert.notNull(migrateType, "Migrate type must not be null");
+
+		migrateHandlers.upload(inputStream, migrateType);
+
+	}
 }

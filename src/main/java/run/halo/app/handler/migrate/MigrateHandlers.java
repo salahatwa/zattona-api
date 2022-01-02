@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import run.halo.app.exception.FileOperationException;
 import run.halo.app.model.enums.MigrateType;
 
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -24,42 +25,57 @@ import java.util.LinkedList;
 @Component
 public class MigrateHandlers {
 
-    /**
-     * Migrate handler container.
-     */
-    private final Collection<MigrateHandler> migrateHandlers = new LinkedList<>();
+	/**
+	 * Migrate handler container.
+	 */
+	private final Collection<MigrateHandler> migrateHandlers = new LinkedList<>();
 
-    public MigrateHandlers(ApplicationContext applicationContext) {
-        // Add all migrate handler
-        addMigrateHandlers(applicationContext.getBeansOfType(MigrateHandler.class).values());
-    }
+	public MigrateHandlers(ApplicationContext applicationContext) {
+		// Add all migrate handler
+		addMigrateHandlers(applicationContext.getBeansOfType(MigrateHandler.class).values());
+	}
 
-    @NonNull
-    public void upload(@NonNull MultipartFile file, @NonNull MigrateType migrateType) {
-        Assert.notNull(file, "Multipart file must not be null");
-        Assert.notNull(migrateType, "Migrate type must not be null");
+	@NonNull
+	public void upload(@NonNull MultipartFile file, @NonNull MigrateType migrateType) {
+		Assert.notNull(file, "Multipart file must not be null");
+		Assert.notNull(migrateType, "Migrate type must not be null");
 
-        for (MigrateHandler migrateHandler : migrateHandlers) {
-            if (migrateHandler.supportType(migrateType)) {
-                migrateHandler.migrate(file);
-                return;
-            }
-        }
+		for (MigrateHandler migrateHandler : migrateHandlers) {
+			if (migrateHandler.supportType(migrateType)) {
+				migrateHandler.migrate(file);
+				return;
+			}
+		}
 
-        throw new FileOperationException("No available migrate handler to migrate the file").setErrorData(migrateType);
-    }
+		throw new FileOperationException("No available migrate handler to migrate the file").setErrorData(migrateType);
+	}
 
-    /**
-     * Adds migrate handlers.
-     *
-     * @param migrateHandlers migrate handler collection
-     * @return current migrate handlers
-     */
-    @NonNull
-    private MigrateHandlers addMigrateHandlers(@Nullable Collection<MigrateHandler> migrateHandlers) {
-        if (!CollectionUtils.isEmpty(migrateHandlers)) {
-            this.migrateHandlers.addAll(migrateHandlers);
-        }
-        return this;
-    }
+	/**
+	 * Adds migrate handlers.
+	 *
+	 * @param migrateHandlers migrate handler collection
+	 * @return current migrate handlers
+	 */
+	@NonNull
+	private MigrateHandlers addMigrateHandlers(@Nullable Collection<MigrateHandler> migrateHandlers) {
+		if (!CollectionUtils.isEmpty(migrateHandlers)) {
+			this.migrateHandlers.addAll(migrateHandlers);
+		}
+		return this;
+	}
+
+	@NonNull
+	public void upload(InputStream inputStream, MigrateType migrateType) {
+		Assert.notNull(inputStream, "inputStream file must not be null");
+		Assert.notNull(migrateType, "Migrate type must not be null");
+
+		for (MigrateHandler migrateHandler : migrateHandlers) {
+			if (migrateHandler.supportType(migrateType)) {
+				migrateHandler.migrate(inputStream);
+				return;
+			}
+		}
+
+		throw new FileOperationException("No available migrate handler to migrate the file").setErrorData(migrateType);
+	}
 }
