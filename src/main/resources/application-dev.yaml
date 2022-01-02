@@ -14,7 +14,7 @@ spring:
 
     # postgress database configuration.
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/db_genhub?useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
+    url: jdbc:postgresql://localhost:5432/db_genhub2?useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
     username: postgres
     password: 123456
 

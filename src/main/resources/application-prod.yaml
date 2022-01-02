@@ -1,5 +1,6 @@
 server:
   # Response data gzip.
+  forward-headers-strategy: native
   compression:
     enabled: false
 spring:
