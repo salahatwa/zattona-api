@@ -57,7 +57,7 @@ public class BlogConfigurationsController {
 		BlogConfigVO configs = new BlogConfigVO();
 		configs.setTopViewPosts(postService.convertToListVo(posts));
 		configs.setLatestPosts(this.pageBy(PageRequest.of(0, 5, Sort.by(Direction.DESC, "createTime"))).getContent());
-		configs.setMenuTeams(menuService.listTeamVos( Sort.by(Direction.ASC, "team")));
+		configs.setMenuTeams(menuService.listTeamVos( Sort.by(Direction.DESC, "team")));
 
 		return configs;
 	}

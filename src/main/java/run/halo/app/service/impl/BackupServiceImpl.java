@@ -372,6 +372,8 @@ public class BackupServiceImpl implements BackupService {
 
 	@Override
 	public void importData(MultipartFile file) throws IOException {
+		System.out.println(">>>>>>>>>>>>>>>>>>");
+		System.out.println(file.getName());
 		String jsonContent = IoUtil.read(file.getInputStream(), StandardCharsets.UTF_8);
 
 		ObjectMapper mapper = JsonUtils.createDefaultJsonMapper();
@@ -482,7 +484,7 @@ public class BackupServiceImpl implements BackupService {
 			}
 			content.append(postMarkdownVO.getOriginalContent());
 			try {
-				String markdownFileName = postMarkdownVO.getTitle() + "-" + postMarkdownVO.getSlug() + ".md";
+				String markdownFileName =  postMarkdownVO.getSlug() + ".md";
 				Path markdownFilePath = Paths.get(markdownFileTempPathName, markdownFileName);
 				if (!Files.exists(markdownFilePath.getParent())) {
 					Files.createDirectories(markdownFilePath.getParent());

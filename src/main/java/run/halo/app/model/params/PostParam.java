@@ -29,7 +29,7 @@ import java.util.Set;
 public class PostParam implements InputConverter<Post> {
 
 	@NotBlank(message = "The title of the article cannot be empty")
-	@Size(max = 100, message = "The character length of the article title cannot exceed {max}")
+	@Size(max = 200, message = "The character length of the article title cannot exceed {max}")
 	private String title;
 
 	private PostStatus status = PostStatus.DRAFT;
