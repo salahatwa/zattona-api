@@ -24,9 +24,9 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 public class Attachment extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom-id")
-    @GenericGenerator(name = "custom-id", strategy = "run.halo.app.model.entity.support.CustomIdGenerator")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
     private Integer id;
 
     /**
