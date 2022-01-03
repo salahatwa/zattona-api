@@ -105,8 +105,8 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
         // Upload file
         UploadResult uploadResult = fileHandlers.upload(file, attachmentType);
 
-        log.debug("Attachment type: [{}]", attachmentType);
-        log.debug("Upload result: [{}]", uploadResult);
+        log.info("Attachment type: [{}]", attachmentType);
+        log.info("Upload result: [{}]", uploadResult);
 
         // Build attachment
         Attachment attachment = new Attachment();
@@ -122,7 +122,7 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
         attachment.setSize(uploadResult.getSize());
         attachment.setType(attachmentType);
 
-        log.debug("Creating attachment: [{}]", attachment);
+        log.info("Creating attachment: [{}]", attachment);
 
         // Create and return
         return create(attachment);

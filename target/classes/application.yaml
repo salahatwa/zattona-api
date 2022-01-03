@@ -3,7 +3,9 @@ server:
   connection-timeout: 50000
   forward-headers-strategy: native
   compression:
-    enabled: false
+    enabled: true
+  http2:
+    enabled: true
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
