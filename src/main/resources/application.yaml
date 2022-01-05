@@ -3,7 +3,7 @@ server:
   connection-timeout: 50000
   forward-headers-strategy: native
   compression:
-    enabled: false
+    enabled: true
     mime-types: text/html,text/css,application/javascript,application/json
     min-response-size: 1024
   http2:
