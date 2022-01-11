@@ -182,12 +182,16 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 			}
 		});
 
+		
+		System.out.println("REMOVE==================================================");
+		System.out.println(postCategoriesToRemove);
 		// Remove post categories
 		removeAll(postCategoriesToRemove);
 
 		// Remove all post categories need to remove
 		postCategories.removeAll(postCategoriesToRemove);
 
+		System.out.println("CREATE==================================================");
 		System.out.println(postCategories);
 		// Add all created post categories
 		if (!postCategoriesToCreate.isEmpty())
