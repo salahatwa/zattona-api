@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -24,6 +25,7 @@ import java.util.Objects;
 public class PostCategory extends BaseEntity {
 
 	@Id
+	@Type(type = "integer")
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom-id")
 	@GenericGenerator(name = "custom-id", strategy = "run.halo.app.model.entity.support.CustomIdGenerator")
 	private Integer id;
@@ -31,12 +33,14 @@ public class PostCategory extends BaseEntity {
 	/**
 	 * Category id.
 	 */
+	@Type(type = "integer")
 	@Column(name = "category_id", columnDefinition = "integer")
 	private Integer categoryId;
 
 	/**
 	 * Post id.
 	 */
+	@Type(type = "integer")
 	@Column(name = "post_id", columnDefinition = "integer")
 	private Integer postId;
 
