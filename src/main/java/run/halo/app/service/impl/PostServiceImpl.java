@@ -748,17 +748,17 @@ public class PostServiceImpl extends BasePostServiceImpl<Post> implements PostSe
 		List<PostTag> postTags = postTagService.mergeOrCreateByIfAbsent(post.getId(),
 				ServiceUtils.fetchProperty(tags, Tag::getId));
 
-		log.debug("Created post tags: [{}]", postTags);
+		log.info("Created post tags: [{}]", postTags);
 
 		// Create post categories
 		List<PostCategory> postCategories = postCategoryService.mergeOrCreateByIfAbsent(post.getId(),
 				ServiceUtils.fetchProperty(categories, Category::getId));
 
-		log.debug("Created post categories: [{}]", postCategories);
+		log.info("Created post categories: [{}]", postCategories);
 
 		// Create post meta data
 		List<PostMeta> postMetaList = postMetaService.createOrUpdateByPostId(post.getId(), metas);
-		log.debug("Created post metas: [{}]", postMetaList);
+		log.info("Created post metas: [{}]", postMetaList);
 
 		// Convert to post detail vo
 		return convertTo(post, tags, categories, postMetaList);
