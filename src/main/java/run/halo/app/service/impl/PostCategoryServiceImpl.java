@@ -176,6 +176,11 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 			}
 		});
 
+		System.out.println("==============postCategoriesStaging==================");
+		System.out.println(postCategoriesStaging);
+		System.out.println("==============postCategories==================");
+		System.out.println(postCategories);
+		
 		postCategoriesStaging.forEach(postCategoryStaging -> {
 			if (!postCategories.contains(postCategoryStaging)) {
 				postCategoriesToCreate.add(postCategoryStaging);
