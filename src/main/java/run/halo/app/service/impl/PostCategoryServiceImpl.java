@@ -194,8 +194,11 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		System.out.println("CREATE==================================================");
 		System.out.println(postCategories);
 		// Add all created post categories
-		if (!postCategoriesToCreate.isEmpty())
+		if (postCategoriesToCreate.size()>0)
+		{
+			System.out.println("IF=================================================="+(postCategoriesToCreate.size()>0));
 			postCategories.addAll(createInBatch(postCategoriesToCreate));
+		}
 
 		// Create them
 		return postCategories;
