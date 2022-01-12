@@ -69,6 +69,7 @@ public interface PostCategoryRepository extends BaseRepository<PostCategory, Int
      */
     @NonNull
     List<PostCategory> findAllByPostId(@NonNull Integer postId);
+    
 
     /**
      * Finds all post categories by category id.

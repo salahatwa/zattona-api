@@ -168,6 +168,8 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		List<PostCategory> postCategoriesToRemove = new LinkedList<>();
 
 		// Find all exist post categories
+		System.out.println("categories:"+categoryIds);
+		System.out.println("POST ID:"+postId);
 		List<PostCategory> postCategories = postCategoryRepository.findAllByPostId(postId);
 
 		postCategories.forEach(postCategory -> {
