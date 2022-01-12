@@ -31,6 +31,7 @@ public class PostCategory extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom-id")
 	@GenericGenerator(name = "custom-id", strategy = "run.halo.app.model.entity.support.CustomIdGenerator")
+	@Column(name = "id")
 	private Integer id;
 
 	/**
