@@ -1,14 +1,21 @@
 package run.halo.app.model.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
-import java.util.Objects;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Post category entity.
@@ -17,8 +24,7 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString(callSuper = true)
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "post_categories", indexes = { @Index(name = "post_categories_post_id", columnList = "post_id"),
 		@Index(name = "post_categories_category_id", columnList = "category_id") })
@@ -33,14 +39,12 @@ public class PostCategory extends BaseEntity {
 	/**
 	 * Category id.
 	 */
-	@Type(type = "integer")
 	@Column(name = "category_id", columnDefinition = "integer")
 	private Integer categoryId;
 
 	/**
 	 * Post id.
 	 */
-	@Type(type = "integer")
 	@Column(name = "post_id", columnDefinition = "integer")
 	private Integer postId;
 
