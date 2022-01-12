@@ -13,25 +13,22 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Post category entity.
  *
  * @author ssatwa
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "post_categories", indexes = { @Index(name = "post_categories_post_id", columnList = "post_id"),
 		@Index(name = "post_categories_category_id", columnList = "category_id") })
+@ToString(callSuper = true)
 public class PostCategory extends BaseEntity {
 
 	@Id
-	@Type(type = "integer")
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom-id")
 	@GenericGenerator(name = "custom-id", strategy = "run.halo.app.model.entity.support.CustomIdGenerator")
 	private Integer id;
@@ -39,13 +36,13 @@ public class PostCategory extends BaseEntity {
 	/**
 	 * Category id.
 	 */
-	@Column(name = "category_id", columnDefinition = "integer")
+	@Column(name = "category_id")
 	private Integer categoryId;
 
 	/**
 	 * Post id.
 	 */
-	@Column(name = "post_id", columnDefinition = "integer")
+	@Column(name = "post_id")
 	private Integer postId;
 
 	@Override
