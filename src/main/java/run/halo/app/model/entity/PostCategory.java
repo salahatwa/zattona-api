@@ -29,8 +29,7 @@ import lombok.ToString;
 public class PostCategory extends BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom-id")
-	@GenericGenerator(name = "custom-id", strategy = "run.halo.app.model.entity.support.CustomIdGenerator")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
