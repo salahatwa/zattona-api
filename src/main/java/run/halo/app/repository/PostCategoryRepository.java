@@ -68,7 +68,12 @@ public interface PostCategoryRepository extends BaseRepository<PostCategory, Int
      * @return a list of post category
      */
     @NonNull
-    List<PostCategory> findAllByPostId(@NonNull Integer postId);
+    List<PostCategory> findAllByPostId(Integer postId);
+    
+    
+    @Query(nativeQuery = true,value ="select *from post_categories where post_id=:postId")
+    @NonNull
+    List<PostCategory> findAllByPostIdNative(Integer postId);
     
 
     /**

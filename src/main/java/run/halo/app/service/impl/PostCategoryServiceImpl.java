@@ -171,7 +171,12 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		System.out.println("categories:"+categoryIds);
 		System.out.println("POST ID:"+postId);
 		List<PostCategory> postCategories = postCategoryRepository.findAllByPostId(postId);
+		
+		List<PostCategory> postCategories2 = postCategoryRepository.findAllByPostIdNative(postId);
 
+		System.out.println("==============postCategories2==================");
+		System.out.println(postCategories2);
+		
 		postCategories.forEach(postCategory -> {
 			if (!postCategoriesStaging.contains(postCategory)) {
 				postCategoriesToRemove.add(postCategory);
