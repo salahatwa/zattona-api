@@ -175,7 +175,9 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		List<PostCategory> postCategories2 = postCategoryRepository.findAllByPostIdNative(postId);
 
 		System.out.println("==============postCategories2==================");
-		System.out.println(postCategories2);
+		System.out.println(postCategories2.size());
+		System.out.println("==============postCategories==================");
+		System.out.println(postCategories.size());
 		
 		postCategories.forEach(postCategory -> {
 			if (!postCategoriesStaging.contains(postCategory)) {
@@ -185,8 +187,7 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 
 		System.out.println("==============postCategoriesStaging==================");
 		System.out.println(postCategoriesStaging);
-		System.out.println("==============postCategories==================");
-		System.out.println(postCategories);
+		
 		
 		postCategoriesStaging.forEach(postCategoryStaging -> {
 			if (!postCategories.contains(postCategoryStaging)) {
