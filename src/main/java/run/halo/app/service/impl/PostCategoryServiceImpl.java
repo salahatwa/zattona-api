@@ -300,9 +300,8 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		
 
 		javax.persistence.Query query = entityManager
-				.createNativeQuery("SELECT setval(pg_get_serial_sequence('?1', 'id'), coalesce(max(id)+1, 1), false) FROM ?2;");
-		query.setParameter(1, table);
-		query.setParameter(2, table);
+				.createNativeQuery("SELECT setval(pg_get_serial_sequence('#table', 'id'), coalesce(max(id)+1, 1), false) FROM #table;");
+		query.setParameter("table", table);
 
 		Object result = query.getResultList();
 		System.out.println("Result================================::" + result);
