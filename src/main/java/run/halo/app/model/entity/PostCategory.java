@@ -63,7 +63,8 @@ public class PostCategory extends BaseEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(postId, categoryId);
+		System.out.println(Objects.hash(postId, categoryId)+":))))))))))))))))))))))))))))))))))))))))))))))))))))");
+		return super.hashCode();
 	}
 
 }

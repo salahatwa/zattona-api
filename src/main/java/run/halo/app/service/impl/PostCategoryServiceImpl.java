@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -168,7 +167,6 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 	}
 
 	@Override
-	@Transactional
 	public List<PostCategory> mergeOrCreateByIfAbsent(Integer postId, Set<Integer> categoryIds) {
 		Assert.notNull(postId, "Post id must not be null");
 
@@ -188,39 +186,11 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		List<PostCategory> postCategoriesToRemove = new LinkedList<>();
 
 		// Find all exist post categories
-		System.out.println("categories:" + categoryIds);
-		System.out.println("POST ID:" + postId);
-		List<PostCategory> postCategories = postCategory2Repositoy.findAllByPostId(postId.intValue());
+		System.out.println("Categories:" + categoryIds + ":POST ID:" + postId);
+		List<PostCategory> postCategories = postCategoryRepository.findAllByPostId(postId);
 
-		List<PostCategory> postCategories2 = postCategory2Repositoy.findAllByPostIdNative(postId.intValue());
-
-		List<PostCategory> postCategories3 = postCategoryRepository.findAllByPostId(postId.intValue());
-
-		List<PostCategory> postCategories4 = postCategoryRepository.findAllByPostIdJPA(postId.intValue());
-
-		List<PostCategory> postCategories5 = postCategoryRepository.findAllByPostIdJPA(postId);
-
-		System.out.println("==============postCategories5==================");
-		System.out.println(postCategories5.size());
-
-		System.out.println("==============postCategories4==================");
-		System.out.println(postCategories4.size());
-
-		System.out.println("==============postCategories3==================");
-		System.out.println(postCategories3.size());
-		System.out.println("==============postCategories2==================");
-		System.out.println(postCategories2.size());
-		System.out.println("==============postCategories==================");
+		System.out.println("==============PostCategories==================");
 		System.out.println(postCategories.size());
-
-		javax.persistence.Query query = entityManager
-				.createNativeQuery("select * from post_categories where post_id= ?");
-		query.setParameter(1, postId);
-
-		List<PostCategory> list = query.getResultList();
-		System.out.println("================================::" + list.size());
-
-		System.out.println(list);
 
 		postCategories.forEach(postCategory -> {
 			if (!postCategoriesStaging.contains(postCategory)) {
@@ -228,7 +198,7 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 			}
 		});
 
-		System.out.println("==============postCategoriesStaging==================");
+		System.out.println("==============PostCategoriesStaging==================");
 		System.out.println(postCategoriesStaging);
 
 		postCategoriesStaging.forEach(postCategoryStaging -> {
@@ -237,22 +207,17 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 			}
 		});
 
-		System.out.println("REMOVE==================================================");
-		System.out.println(postCategoriesToRemove);
+		System.out.println("REMOVE===========:" + postCategoriesToRemove);
+		System.out.println("CREATE===========:" + postCategoriesToCreate);
 		// Remove post categories
 		removeAll(postCategoriesToRemove);
 
 		// Remove all post categories need to remove
 		postCategories.removeAll(postCategoriesToRemove);
 
-		System.out.println("CREATE==================================================");
-		System.out.println(postCategoriesToCreate);
-		// Add all created post categories
-		if (postCategoriesToCreate.size() > 0) {
-			System.out.println(postCategoriesToCreate.size() + "IF=================================================="
-					+ (postCategoriesToCreate.size() > 0));
-			postCategories.addAll(createInBatch(postCategoriesToCreate));
-		}
+		
+		System.out.println(postCategoriesToCreate.size() + "=====" + (postCategoriesToCreate.size() > 0));
+		postCategories.addAll(createInBatch(postCategoriesToCreate));
 
 		// Create them
 		return postCategories;
