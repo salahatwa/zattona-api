@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -50,17 +54,21 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 	private final CategoryRepository categoryRepository;
 
 	private final OptionService optionService;
-	
+
 	private final PostCategory2Repositoy postCategory2Repositoy;
 
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	public PostCategoryServiceImpl(PostCategoryRepository postCategoryRepository, PostRepository postRepository,
-			CategoryRepository categoryRepository, OptionService optionService,PostCategory2Repositoy postCategory2Repositoy) {
+			CategoryRepository categoryRepository, OptionService optionService,
+			PostCategory2Repositoy postCategory2Repositoy) {
 		super(postCategoryRepository);
 		this.postCategoryRepository = postCategoryRepository;
 		this.postRepository = postRepository;
 		this.categoryRepository = categoryRepository;
 		this.optionService = optionService;
-		this.postCategory2Repositoy=postCategory2Repositoy;
+		this.postCategory2Repositoy = postCategory2Repositoy;
 	}
 
 	@Override
@@ -128,8 +136,8 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		Assert.notNull(slug, "Category slug must not be null");
 		Assert.notNull(status, "Post status must not be null");
 
-		Category category = categoryRepository.getBySlug(slug)
-				.orElseThrow(() -> new NotFoundException("No information in this category can be found").setErrorData(slug));
+		Category category = categoryRepository.getBySlug(slug).orElseThrow(
+				() -> new NotFoundException("No information in this category can be found").setErrorData(slug));
 
 		Set<Integer> postsIds = postCategoryRepository.findAllPostIdsByCategoryId(category.getId(), status);
 
@@ -160,6 +168,7 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 	}
 
 	@Override
+	@Transactional
 	public List<PostCategory> mergeOrCreateByIfAbsent(Integer postId, Set<Integer> categoryIds) {
 		Assert.notNull(postId, "Post id must not be null");
 
@@ -179,12 +188,12 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		List<PostCategory> postCategoriesToRemove = new LinkedList<>();
 
 		// Find all exist post categories
-		System.out.println("categories:"+categoryIds);
-		System.out.println("POST ID:"+postId);
+		System.out.println("categories:" + categoryIds);
+		System.out.println("POST ID:" + postId);
 		List<PostCategory> postCategories = postCategory2Repositoy.findAllByPostId(postId.intValue());
-		
+
 		List<PostCategory> postCategories2 = postCategory2Repositoy.findAllByPostIdNative(postId.intValue());
-		
+
 		List<PostCategory> postCategories3 = postCategoryRepository.findAllByPostId(postId.intValue());
 
 		List<PostCategory> postCategories4 = postCategoryRepository.findAllByPostIdJPA(postId.intValue());
@@ -193,16 +202,25 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 
 		System.out.println("==============postCategories5==================");
 		System.out.println(postCategories5.size());
-		
+
 		System.out.println("==============postCategories4==================");
 		System.out.println(postCategories4.size());
-		
+
 		System.out.println("==============postCategories3==================");
 		System.out.println(postCategories3.size());
 		System.out.println("==============postCategories2==================");
 		System.out.println(postCategories2.size());
 		System.out.println("==============postCategories==================");
 		System.out.println(postCategories.size());
+
+		javax.persistence.Query query = entityManager
+				.createNativeQuery("select * from post_categories where post_id= ?");
+		query.setParameter(1, postId);
+
+		List<PostCategory> list = query.getResultList();
+		System.out.println("================================::" + list.size());
+		
+		System.out.println(list);
 		
 		postCategories.forEach(postCategory -> {
 			if (!postCategoriesStaging.contains(postCategory)) {
@@ -212,15 +230,13 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 
 		System.out.println("==============postCategoriesStaging==================");
 		System.out.println(postCategoriesStaging);
-		
-		
+
 		postCategoriesStaging.forEach(postCategoryStaging -> {
 			if (!postCategories.contains(postCategoryStaging)) {
 				postCategoriesToCreate.add(postCategoryStaging);
 			}
 		});
 
-		
 		System.out.println("REMOVE==================================================");
 		System.out.println(postCategoriesToRemove);
 		// Remove post categories
@@ -232,9 +248,9 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		System.out.println("CREATE==================================================");
 		System.out.println(postCategoriesToCreate);
 		// Add all created post categories
-		if (postCategoriesToCreate.size()>0)
-		{
-			System.out.println(postCategoriesToCreate.size()+"IF=================================================="+(postCategoriesToCreate.size()>0));
+		if (postCategoriesToCreate.size() > 0) {
+			System.out.println(postCategoriesToCreate.size() + "IF=================================================="
+					+ (postCategoriesToCreate.size() > 0));
 			postCategories.addAll(createInBatch(postCategoriesToCreate));
 		}
 
