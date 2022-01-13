@@ -160,4 +160,6 @@ public interface PostCategoryService extends CrudService<PostCategory, Integer> 
      */
     @NonNull
     List<CategoryWithPostCountDTO> listCategoryWithPostCountDto(@NonNull Sort sort);
+
+	List<PostCategory> getPostCat(Integer postId);
 }

@@ -219,9 +219,9 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 
 		List<PostCategory> list = query.getResultList();
 		System.out.println("================================::" + list.size());
-		
+
 		System.out.println(list);
-		
+
 		postCategories.forEach(postCategory -> {
 			if (!postCategoriesStaging.contains(postCategory)) {
 				postCategoriesToRemove.add(postCategory);
@@ -324,4 +324,46 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 			return categoryWithPostCountDTO;
 		}).collect(Collectors.toList());
 	}
+
+	@Override
+	public List<PostCategory> getPostCat(Integer postId) {
+		Assert.notNull(postId, "Post id must not be null");
+
+		System.out.println("POST ID:" + postId);
+		List<PostCategory> postCategories = postCategory2Repositoy.findAllByPostId(postId.intValue());
+
+		List<PostCategory> postCategories2 = postCategory2Repositoy.findAllByPostIdNative(postId.intValue());
+
+		List<PostCategory> postCategories3 = postCategoryRepository.findAllByPostId(postId.intValue());
+
+		List<PostCategory> postCategories4 = postCategoryRepository.findAllByPostIdJPA(postId.intValue());
+
+		List<PostCategory> postCategories5 = postCategoryRepository.findAllByPostIdJPA(postId);
+
+		System.out.println("==============postCategories5==================");
+		System.out.println(postCategories5.size());
+
+		System.out.println("==============postCategories4==================");
+		System.out.println(postCategories4.size());
+
+		System.out.println("==============postCategories3==================");
+		System.out.println(postCategories3.size());
+		System.out.println("==============postCategories2==================");
+		System.out.println(postCategories2.size());
+		System.out.println("==============postCategories==================");
+		System.out.println(postCategories.size());
+
+		javax.persistence.Query query = entityManager
+				.createNativeQuery("select * from post_categories where post_id= ?");
+		query.setParameter(1, postId);
+
+		List<PostCategory> list = query.getResultList();
+		System.out.println("================================::" + list.size());
+
+		System.out.println(list);
+
+		// Create them
+		return postCategories;
+	}
+
 }

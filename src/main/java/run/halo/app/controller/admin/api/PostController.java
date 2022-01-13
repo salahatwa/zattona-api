@@ -1,16 +1,36 @@
 package run.halo.app.controller.admin.api;
 
-import cn.hutool.core.util.IdUtil;
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.domain.Sort.Direction.DESC;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import cn.hutool.core.util.IdUtil;
+import io.swagger.annotations.ApiOperation;
 import run.halo.app.cache.AbstractStringCacheStore;
 import run.halo.app.model.dto.post.BasePostDetailDTO;
 import run.halo.app.model.dto.post.BasePostMinimalDTO;
 import run.halo.app.model.dto.post.BasePostSimpleDTO;
 import run.halo.app.model.entity.Post;
+import run.halo.app.model.entity.PostCategory;
 import run.halo.app.model.enums.PostPermalinkType;
 import run.halo.app.model.enums.PostStatus;
 import run.halo.app.model.params.PostContentParam;
@@ -19,15 +39,6 @@ import run.halo.app.model.params.PostQuery;
 import run.halo.app.model.vo.PostDetailVO;
 import run.halo.app.service.OptionService;
 import run.halo.app.service.PostService;
-
-import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 /**
  * Post controller.
@@ -192,5 +203,12 @@ public class PostController {
 
         // build preview post url and return
         return previewUrl.toString();
+    }
+    
+    
+    @GetMapping("getcategory/{postId}")
+    @ApiOperation("Updates post status in batch")
+    public List<PostCategory> updateStatusInBatch(@PathVariable(name = "postId") Integer postId) {
+        return postService.getPostCategory(postId);
     }
 }

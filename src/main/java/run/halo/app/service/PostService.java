@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import run.halo.app.model.entity.Post;
+import run.halo.app.model.entity.PostCategory;
 import run.halo.app.model.entity.PostMeta;
 import run.halo.app.model.enums.PostStatus;
 import run.halo.app.model.params.PostQuery;
@@ -286,4 +287,6 @@ public interface PostService extends BasePostService<Post> {
 	List<PostMarkdownVO> listPostMarkdowns();
 
 	List<Post> topView();
+
+	List<PostCategory> getPostCategory(Integer postId);
 }
