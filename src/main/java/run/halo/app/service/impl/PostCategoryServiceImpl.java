@@ -1,11 +1,23 @@
 package run.halo.app.service.impl;
 
+import static run.halo.app.model.support.HaloConst.URL_SEPARATOR;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+
 import run.halo.app.exception.NotFoundException;
 import run.halo.app.model.dto.CategoryWithPostCountDTO;
 import run.halo.app.model.entity.Category;
@@ -14,17 +26,13 @@ import run.halo.app.model.entity.PostCategory;
 import run.halo.app.model.enums.PostStatus;
 import run.halo.app.model.projection.CategoryPostCountProjection;
 import run.halo.app.repository.CategoryRepository;
+import run.halo.app.repository.PostCategory2Repositoy;
 import run.halo.app.repository.PostCategoryRepository;
 import run.halo.app.repository.PostRepository;
 import run.halo.app.service.OptionService;
 import run.halo.app.service.PostCategoryService;
 import run.halo.app.service.base.AbstractCrudService;
 import run.halo.app.utils.ServiceUtils;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static run.halo.app.model.support.HaloConst.URL_SEPARATOR;
 
 /**
  * Post category service implementation.
@@ -42,14 +50,17 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 	private final CategoryRepository categoryRepository;
 
 	private final OptionService optionService;
+	
+	private final PostCategory2Repositoy postCategory2Repositoy;
 
 	public PostCategoryServiceImpl(PostCategoryRepository postCategoryRepository, PostRepository postRepository,
-			CategoryRepository categoryRepository, OptionService optionService) {
+			CategoryRepository categoryRepository, OptionService optionService,PostCategory2Repositoy postCategory2Repositoy) {
 		super(postCategoryRepository);
 		this.postCategoryRepository = postCategoryRepository;
 		this.postRepository = postRepository;
 		this.categoryRepository = categoryRepository;
 		this.optionService = optionService;
+		this.postCategory2Repositoy=postCategory2Repositoy;
 	}
 
 	@Override
@@ -118,7 +129,7 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		Assert.notNull(status, "Post status must not be null");
 
 		Category category = categoryRepository.getBySlug(slug)
-				.orElseThrow(() -> new NotFoundException("查询不到该分类的信息").setErrorData(slug));
+				.orElseThrow(() -> new NotFoundException("No information in this category can be found").setErrorData(slug));
 
 		Set<Integer> postsIds = postCategoryRepository.findAllPostIdsByCategoryId(category.getId(), status);
 
@@ -170,9 +181,9 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		// Find all exist post categories
 		System.out.println("categories:"+categoryIds);
 		System.out.println("POST ID:"+postId);
-		List<PostCategory> postCategories = postCategoryRepository.findAllByPostId(postId);
+		List<PostCategory> postCategories = postCategory2Repositoy.findAllByPostId(postId);
 		
-		List<PostCategory> postCategories2 = postCategoryRepository.findAllByPostIdNative(postId);
+		List<PostCategory> postCategories2 = postCategory2Repositoy.findAllByPostIdNative(postId);
 
 		System.out.println("==============postCategories2==================");
 		System.out.println(postCategories2.size());
