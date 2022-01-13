@@ -10,11 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import lombok.Data;
-import lombok.ToString;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Post category entity.
@@ -22,10 +20,11 @@ import lombok.ToString;
  * @author ssatwa
  */
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "post_categories", indexes = { @Index(name = "post_categories_post_id", columnList = "post_id"),
 		@Index(name = "post_categories_category_id", columnList = "category_id") })
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class PostCategory extends BaseEntity {
 
 	@Id
