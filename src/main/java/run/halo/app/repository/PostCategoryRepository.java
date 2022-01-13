@@ -1,6 +1,7 @@
 package run.halo.app.repository;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import run.halo.app.model.entity.PostCategory;
 import run.halo.app.model.enums.PostStatus;
@@ -71,7 +72,7 @@ public interface PostCategoryRepository extends BaseRepository<PostCategory, Int
     
     
     @Query(nativeQuery = true,value ="select * from post_categories where post_id=:postId")
-    List<PostCategory> findAllByPostIdNative(Integer postId);
+    List<PostCategory> findAllByPostIdNative(@Param("postId") Integer postId);
     
 
     /**
