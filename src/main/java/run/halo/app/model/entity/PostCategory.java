@@ -10,38 +10,42 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Post category entity.
  *
  * @author ssatwa
  */
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString(callSuper = true)
+@RequiredArgsConstructor
 @Entity
 @Table(name = "post_categories", indexes = { @Index(name = "post_categories_post_id", columnList = "post_id"),
 		@Index(name = "post_categories_category_id", columnList = "category_id") })
-@EqualsAndHashCode(callSuper = false)
 public class PostCategory extends BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom-id")
+	@GenericGenerator(name = "custom-id", strategy = "run.halo.app.model.entity.support.CustomIdGenerator")
 	private Integer id;
 
 	/**
 	 * Category id.
 	 */
-	@Column(name = "category_id")
+	@Column(name = "category_id", nullable = false)
 	private Integer categoryId;
 
 	/**
 	 * Post id.
 	 */
-	@Column(name = "post_id")
+	@Column(name = "post_id", nullable = false)
 	private Integer postId;
 
 	@Override
@@ -53,11 +57,13 @@ public class PostCategory extends BaseEntity {
 			return false;
 		}
 		PostCategory that = (PostCategory) o;
-		return categoryId.equals(that.categoryId) && postId.equals(that.postId);
+
+		return Objects.equals(categoryId, that.categoryId) && Objects.equals(postId, that.postId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(categoryId, postId);
+		return Objects.hash(postId, categoryId);
 	}
+
 }
