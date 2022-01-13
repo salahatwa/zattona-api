@@ -319,11 +319,14 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		System.out.println(postCategories.size());
 
 		javax.persistence.Query query = entityManager
-				.createNativeQuery("select * from post_categories where post_id= ?");
-		query.setParameter(1, postId);
+				.createNativeQuery("SELECT setval(pg_get_serial_sequence('post_categories', 'id'), coalesce(max(id)+1, 1), false) FROM post_categories;");
+//		query.setParameter(1, postId);
 
+		int rows=query.executeUpdate();
+		System.out.println("================================::" + rows);
+		
 		List<PostCategory> list = query.getResultList();
-		System.out.println("================================::" + list.size());
+		
 
 		System.out.println(list);
 
