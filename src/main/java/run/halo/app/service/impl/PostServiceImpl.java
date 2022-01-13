@@ -920,10 +920,8 @@ public class PostServiceImpl extends BasePostServiceImpl<Post> implements PostSe
 	}
 
 	@Override
-	public List<PostCategory> getPostCategory(Integer postId) {
-		// Create post categories
-		List<PostCategory> postCategories = postCategoryService.getPostCat(postId);
-		return postCategories;
+	public Object updateSequence(String table) {
+		return postCategoryService.updateSequence(table);
 	}
 
 }

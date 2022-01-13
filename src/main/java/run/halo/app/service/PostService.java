@@ -288,5 +288,6 @@ public interface PostService extends BasePostService<Post> {
 
 	List<Post> topView();
 
-	List<PostCategory> getPostCategory(Integer postId);
+
+	Object updateSequence(String table);
 }
