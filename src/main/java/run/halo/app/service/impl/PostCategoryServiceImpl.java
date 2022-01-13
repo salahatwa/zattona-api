@@ -181,10 +181,14 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		// Find all exist post categories
 		System.out.println("categories:"+categoryIds);
 		System.out.println("POST ID:"+postId);
-		List<PostCategory> postCategories = postCategory2Repositoy.findAllByPostId(postId);
+		List<PostCategory> postCategories = postCategory2Repositoy.findAllByPostId(postId.intValue());
 		
-		List<PostCategory> postCategories2 = postCategory2Repositoy.findAllByPostIdNative(postId);
+		List<PostCategory> postCategories2 = postCategory2Repositoy.findAllByPostIdNative(postId.intValue());
+		
+		List<PostCategory> postCategories3 = postCategoryRepository.findAllByPostId(postId.intValue());
 
+		System.out.println("==============postCategories3==================");
+		System.out.println(postCategories3.size());
 		System.out.println("==============postCategories2==================");
 		System.out.println(postCategories2.size());
 		System.out.println("==============postCategories==================");
