@@ -187,6 +187,16 @@ public class PostCategoryServiceImpl extends AbstractCrudService<PostCategory, I
 		
 		List<PostCategory> postCategories3 = postCategoryRepository.findAllByPostId(postId.intValue());
 
+		List<PostCategory> postCategories4 = postCategoryRepository.findAllByPostIdJPA(postId.intValue());
+
+		List<PostCategory> postCategories5 = postCategoryRepository.findAllByPostIdJPA(postId);
+
+		System.out.println("==============postCategories5==================");
+		System.out.println(postCategories5.size());
+		
+		System.out.println("==============postCategories4==================");
+		System.out.println(postCategories4.size());
+		
 		System.out.println("==============postCategories3==================");
 		System.out.println(postCategories3.size());
 		System.out.println("==============postCategories2==================");
