@@ -1,13 +1,10 @@
-<#--
-see https://gitee.com/yadong.zhang/DBlog/blob/master/blog-web/src/main/java/com/zyd/blog/controller/RestWebSiteController.java
--->
 <#compress >
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>${blog_title!} 网站地图</title>
+    <title>${blog_title!} Sitemap</title>
     <meta name="robots" content="index,follow"/>
     <style type="text/css">
         body {
@@ -119,10 +116,10 @@ see https://gitee.com/yadong.zhang/DBlog/blob/master/blog-web/src/main/java/com/
     </style>
 </head>
 <body>
-<h2 style="text-align: center; margin-top: 20px">${blog_title!} 网站地图 </h2>
-<div id="nav"><a href="${blog_url!}"><strong>${blog_title!}</strong></a> &raquo; <a href="${sitemap_html_url!}">站点地图</a></div>
+<h2 style="text-align: center; margin-top: 20px">${blog_title!} Sitemap </h2>
+<div id="nav"><a href="${blog_url!}"><strong>${blog_title!}</strong></a> &raquo; <a href="${sitemap_html_url!}">sitemap</a></div>
 <div id="content">
-    <h3>最新文章</h3>
+    <h3>Latest articles</h3>
     <ul id="contentTable">
         <li>
             <div class="T1-h pull-left">URL</div>
@@ -152,7 +149,7 @@ see https://gitee.com/yadong.zhang/DBlog/blob/master/blog-web/src/main/java/com/
     </ul>
 </div>
 <div id="content">
-    <h3>分类目录</h3>
+    <h3>Categories</h3>
     <ul id="contentTable">
         <@categoryTag method="list">
             <#if categories?? && categories?size gt 0>
@@ -170,7 +167,7 @@ see https://gitee.com/yadong.zhang/DBlog/blob/master/blog-web/src/main/java/com/
     </ul>
 </div>
 <div id="content">
-    <h3>标签目录</h3>
+    <h3>Tag catalog</h3>
     <ul id="contentTable">
         <@tagTag method="list">
             <#if tags?? && tags?size gt 0>
@@ -188,7 +185,7 @@ see https://gitee.com/yadong.zhang/DBlog/blob/master/blog-web/src/main/java/com/
     </ul>
 </div>
 <div id="footer">
-    该文件由 <a href="${blog_url!}" title="${blog_title!}">${blog_title!}</a> 网站自动生成。
+    This file is provided by <a href="${blog_url!}" title="${blog_title!}">${blog_title!}</a> The website is automatically generated.
 </div>
 </body>
 </html>

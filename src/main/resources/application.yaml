@@ -4,10 +4,10 @@ server:
   forward-headers-strategy: native
   compression:
     enabled: true
-    mime-types: text/html,text/css,application/javascript,application/json,text/plain
+    mime-types: text/html,text/plain,text/css,application/javascript,application/json
     min-response-size: 1024
   http2:
-    enabled: true
+    enabled: false
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -64,4 +64,14 @@ springfox:
 halo:
   download-timeout: 10m
   cache: memory
+  
+google:
+  site-url: https://zattona.herokuapp.com
+  sitemap-url: https://zattona.herokuapp.com/generate/sitemap.xml
+  sitemap-url-extra: https://zattona.herokuapp.com/resources/links,https://zattona.herokuapp.com/resources/tools,https://zattona.herokuapp.com/resources/tools/code-generator,https://zattona.herokuapp.com/resources/tools/image-from-html,https://zattona.herokuapp.com/resources/tools/qr-generator,https://zattona.herokuapp.com/resources/tools/ip-details,https://zattona.herokuapp.com/info/privacy-policy,https://zattona.herokuapp.com/info/terms-and-condition,https://zattona.herokuapp.com/info/about,https://zattona.herokuapp.com/contact
+  post-url: https://zattona.herokuapp.com/post/
+  category-url: https://zattona.herokuapp.com/category/
+  tag-url: https://zattona.herokuapp.com/tag/
+  ads: google.com, pub-1100841741323345, DIRECT, f08c47fec0942fa0
+  
   
