@@ -181,6 +181,7 @@ public class ContentFeedController {
      * @throws TemplateException TemplateException
      */
     @GetMapping(value = "robots.txt", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
     public String robots(Model model) throws IOException, TemplateException {
         Template template = freeMarker.getConfiguration().getTemplate("common/web/robots.ftl");
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
