@@ -1,6 +1,9 @@
 package run.halo.app.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -31,80 +34,79 @@ import static run.halo.app.model.support.HaloConst.URL_SEPARATOR;
 @Service
 public class TagServiceImpl extends AbstractCrudService<Tag, Integer> implements TagService {
 
-    private final TagRepository tagRepository;
+	private final TagRepository tagRepository;
 
-    private final OptionService optionService;
+	private final OptionService optionService;
 
-    public TagServiceImpl(TagRepository tagRepository,
-            OptionService optionService) {
-        super(tagRepository);
-        this.tagRepository = tagRepository;
-        this.optionService = optionService;
-    }
+	public TagServiceImpl(TagRepository tagRepository, OptionService optionService) {
+		super(tagRepository);
+		this.tagRepository = tagRepository;
+		this.optionService = optionService;
+	}
 
-    @Override
-    @Transactional
-    public Tag create(Tag tag) {
-        // Check if the tag is exist
-        long count = tagRepository.countByNameOrSlug(tag.getName(), tag.getSlug());
+	public void pageTags(Pageable pageable) {
+		Page<Tag> tags = tagRepository.findAll(pageable);
+	}
 
-        log.debug("Tag count: [{}]", count);
+	@Override
+	@Transactional
+	public Tag create(Tag tag) {
+		// Check if the tag is exist
+		long count = tagRepository.countByNameOrSlug(tag.getName(), tag.getSlug());
 
-        if (count > 0) {
-            // If the tag has exist already
-            throw new AlreadyExistsException("The label already exists").setErrorData(tag);
-        }
+		log.debug("Tag count: [{}]", count);
 
-        // Get tag name
-        return super.create(tag);
-    }
+		if (count > 0) {
+			// If the tag has exist already
+			throw new AlreadyExistsException("The label already exists").setErrorData(tag);
+		}
 
-    @Override
-    public Tag getBySlugOfNonNull(String slug) {
-        return tagRepository.getBySlug(slug).orElseThrow(() -> new NotFoundException("查询不到该标签的信息").setErrorData(slug));
-    }
+		// Get tag name
+		return super.create(tag);
+	}
 
-    @Override
-    public Tag getBySlug(String slug) {
-        return tagRepository.getBySlug(slug).orElse(null);
-    }
+	@Override
+	public Tag getBySlugOfNonNull(String slug) {
+		return tagRepository.getBySlug(slug)
+				.orElseThrow(() -> new NotFoundException("Can't find information about this tag").setErrorData(slug));
+	}
 
-    @Override
-    public Tag getByName(String name) {
-        return tagRepository.getByName(name).orElse(null);
-    }
+	@Override
+	public Tag getBySlug(String slug) {
+		return tagRepository.getBySlug(slug).orElse(null);
+	}
 
-    @Override
-    public TagDTO convertTo(Tag tag) {
-        Assert.notNull(tag, "Tag must not be null");
+	@Override
+	public Tag getByName(String name) {
+		return tagRepository.getByName(name).orElse(null);
+	}
 
-        TagDTO tagDTO = new TagDTO().convertFrom(tag);
+	@Override
+	public TagDTO convertTo(Tag tag) {
+		Assert.notNull(tag, "Tag must not be null");
 
-        StringBuilder fullPath = new StringBuilder();
+		TagDTO tagDTO = new TagDTO().convertFrom(tag);
 
-        if (optionService.isEnabledAbsolutePath()) {
-            fullPath.append(optionService.getBlogBaseUrl());
-        }
+		StringBuilder fullPath = new StringBuilder();
 
-        fullPath.append(URL_SEPARATOR)
-                .append(optionService.getTagsPrefix())
-                .append(URL_SEPARATOR)
-                .append(tag.getSlug())
-                .append(optionService.getPathSuffix());
+		if (optionService.isEnabledAbsolutePath()) {
+			fullPath.append(optionService.getBlogBaseUrl());
+		}
 
-        tagDTO.setFullPath(fullPath.toString());
+		fullPath.append(URL_SEPARATOR).append(optionService.getTagsPrefix()).append(URL_SEPARATOR).append(tag.getSlug())
+				.append(optionService.getPathSuffix());
 
-        return tagDTO;
-    }
+		tagDTO.setFullPath(fullPath.toString());
 
-    @Override
-    public List<TagDTO> convertTo(List<Tag> tags) {
-        if (CollectionUtils.isEmpty(tags)) {
-            return Collections.emptyList();
-        }
+		return tagDTO;
+	}
 
-        return tags.stream()
-                .map(this::convertTo)
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<TagDTO> convertTo(List<Tag> tags) {
+		if (CollectionUtils.isEmpty(tags)) {
+			return Collections.emptyList();
+		}
+
+		return tags.stream().map(this::convertTo).collect(Collectors.toList());
+	}
 }

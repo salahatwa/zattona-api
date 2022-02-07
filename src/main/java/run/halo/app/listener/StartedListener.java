@@ -1,6 +1,18 @@
 package run.halo.app.listener;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.util.Collections;
+
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.internal.jdbc.JdbcUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +27,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
+
+import lombok.extern.slf4j.Slf4j;
 import run.halo.app.config.properties.HaloProperties;
 import run.halo.app.model.properties.PrimaryProperties;
 import run.halo.app.model.support.HaloConst;
 import run.halo.app.service.OptionService;
 import run.halo.app.service.ThemeService;
+import run.halo.app.service.impl.ZattonaConfigService;
 import run.halo.app.utils.FileUtils;
-
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.*;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.Collections;
 
 /**
  * The method executed after the application is started.
@@ -50,6 +57,9 @@ public class StartedListener implements ApplicationListener<ApplicationStartedEv
 	@Autowired
 	private ThemeService themeService;
 
+	@Autowired
+	private ZattonaConfigService configService;
+
 	@Value("${spring.datasource.url}")
 	private String url;
 
@@ -66,9 +76,16 @@ public class StartedListener implements ApplicationListener<ApplicationStartedEv
 		} catch (SQLException e) {
 			log.error("Failed to migrate database!", e);
 		}
+
 		this.initThemes();
 		this.initDirectory();
+		this.initConfig();
 		this.printStartInfo();
+	}
+
+	private void initConfig() {
+		configService.init();
+		log.info(AnsiOutput.toString(AnsiColor.BRIGHT_BLUE, "Intialized Cached Configs Successfully :)"));
 	}
 
 	private void printStartInfo() {
@@ -143,7 +160,7 @@ public class StartedListener implements ApplicationListener<ApplicationStartedEv
 			// Fix the problem that the project cannot start after moving to a new server
 			if (!haloProperties.isProductionEnv() || Files.notExists(themePath) || !isInstalled) {
 				log.info("Copy theme folder from [{}] to [{}]", source, themePath);
-				FileUtils.copyFolder(source, themePath,isJar);
+				FileUtils.copyFolder(source, themePath, isJar);
 				log.info("Done copied success!!");
 			} else {
 				log.info("Skipped copying theme folder due to existence of theme folder");

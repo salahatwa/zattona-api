@@ -122,6 +122,11 @@ public class PostServiceImpl extends BasePostServiceImpl<Post> implements PostSe
 		this.optionService = optionService;
 	}
 
+	public List<PostListVO> topPosts(Pageable pageable) {
+		return convertToListVo(postRepository.findAllByStatusAndTopPriority(PostStatus.PUBLISHED, 1, pageable))
+				.toList();
+	}
+
 	@Override
 	public Page<Post> pageBy(PostQuery postQuery, Pageable pageable) {
 		Assert.notNull(postQuery, "Post query must not be null");

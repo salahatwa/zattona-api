@@ -1,6 +1,7 @@
 package run.halo.app.model.vo;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class BlogConfigVO {
 
 	private List<PostListVO> topViewPosts;
 	private List<PostListVO> latestPosts;
+	private Map<String, List<PostListVO>> groupedPosts;
 	private List<MenuTeamVO> menuTeams;
 
 }

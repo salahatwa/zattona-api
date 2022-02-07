@@ -47,6 +47,9 @@ public interface PostService extends BasePostService<Post> {
 	@NonNull
 	Page<Post> pageBy(@NonNull String keyword, @NonNull Pageable pageable);
 
+	@NonNull
+	List<PostListVO> topPosts(Pageable pageable);
+
 	/**
 	 * Creates post by post param.
 	 *
@@ -287,7 +290,6 @@ public interface PostService extends BasePostService<Post> {
 	List<PostMarkdownVO> listPostMarkdowns();
 
 	List<Post> topView();
-
 
 	Object updateSequence(String table);
 }

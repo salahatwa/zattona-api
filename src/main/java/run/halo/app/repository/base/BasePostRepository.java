@@ -141,6 +141,13 @@ public interface BasePostRepository<POST extends BasePost> extends BaseRepositor
 	Page<POST> findAllByStatusAndVisitsAfter(@NonNull PostStatus status, @NonNull Long visits,
 			@NonNull Pageable pageable);
 
+	@NonNull
+	Page<POST> findAllByStatusAndTopPriority(@NonNull PostStatus status, @NonNull Integer priority,
+			@NonNull Pageable pageable);
+
+	@NonNull
+	List<POST> findAllByStatusAndTopPriority(@NonNull PostStatus status, @NonNull Integer priority);
+
 	/**
 	 * Gets post by slug and status.
 	 *

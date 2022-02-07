@@ -66,6 +66,10 @@ public abstract class BasePostServiceImpl<POST extends BasePost> extends Abstrac
 		this.optionService = optionService;
 	}
 
+	public List<POST> topPosts() {
+		return basePostRepository.findAllByStatusAndTopPriority(PostStatus.PUBLISHED, 1);
+	}
+
 	@Override
 	public long countVisit() {
 		return Optional.ofNullable(basePostRepository.countVisit()).orElse(0L);
