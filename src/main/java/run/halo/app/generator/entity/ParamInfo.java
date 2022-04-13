@@ -1,5 +1,6 @@
 package run.halo.app.generator.entity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class ParamInfo {
 
     private String input;
     private List<String> selectedTmpIds; 
-    private Map<String,Object> options;
+    private Map<String,Object> options=new HashMap<String, Object>();
 
     @Data
     public static class NAME_CASE_TYPE {

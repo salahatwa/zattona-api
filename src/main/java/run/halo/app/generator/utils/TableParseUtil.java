@@ -122,7 +122,7 @@ public class TableParseUtil {
 			}
 		});
 		if (fieldList.size() < 1) {
-			throw new CodeGenerateException("JSON解析失败");
+			throw new CodeGenerateException("JSON Parsing failed");
 		}
 		return fieldList;
 	}

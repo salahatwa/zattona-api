@@ -52,6 +52,8 @@ public class ToolsController {
 
 		
 
+		System.out.println(paramInfo.getInput());
+		System.out.println(paramInfo.getSelectedTmpIds());
 		// 3.generate the code by freemarker templates with parameters .
 		List<GeneratedCode> result = generatorService.getResultByParams(paramInfo);
 		return result;

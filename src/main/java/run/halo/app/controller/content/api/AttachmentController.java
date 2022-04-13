@@ -1,4 +1,4 @@
-package run.halo.app.controller.content;
+package run.halo.app.controller.content.api;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
@@ -27,12 +27,12 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
  * @date 2019-03-21
  */
 @RestController
-@RequestMapping("/api/file")
-public class FileManagerController {
+@RequestMapping("/api/admin/attachments")
+public class AttachmentController {
 
     private final AttachmentService attachmentService;
 
-    public FileManagerController(AttachmentService attachmentService) {
+    public AttachmentController(AttachmentService attachmentService) {
         this.attachmentService = attachmentService;
     }
 
@@ -73,7 +73,6 @@ public class FileManagerController {
     @PostMapping("upload")
     @ApiOperation("Uploads single file")
     public AttachmentDTO uploadAttachment(@RequestPart("file") MultipartFile file) {
-    	System.out.println("Upload Attachment");
         return attachmentService.convertToDto(attachmentService.upload(file));
     }
 

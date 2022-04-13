@@ -109,8 +109,10 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 		// 1.Parse Table Structure
 		String dataType = MapUtil.getString(paramInfo.getOptions(), "dataType");
+		
+		System.out.println(":::>>>>>"+dataType);
 
-		if (!dataType.equals("xml")) {
+		if (dataType.equals("xml")) {
 			paramInfo.setInput(XML.toJSONObject(paramInfo.getInput()).toString());
 		}
 
@@ -125,6 +127,8 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 			List<GTemplateGroup> parentTemplates = getTemplateConfig();
 
+			System.out.println(paramInfo.getSelectedTmpIds().size());
+			
 			List<GTemplate> allTemps = parentTemplates.stream().flatMap(p -> p.getTemplates().stream())
 					.filter(i -> paramInfo.getSelectedTmpIds().stream().anyMatch(id -> id.equals(i.getId())))
 					.collect(Collectors.toList());

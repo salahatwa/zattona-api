@@ -303,10 +303,13 @@ public abstract class BasePostServiceImpl<POST extends BasePost> extends Abstrac
 		// The sheet will be updated
 		// Set edit time
 		post.setEditTime(DateUtils.now());
+		
 
 		// Update it
 		return update(post);
 	}
+	
+	
 
 	@Override
 	public POST filterIfEncrypt(POST post) {
